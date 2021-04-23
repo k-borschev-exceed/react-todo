@@ -1,0 +1,22 @@
+input, button{ border:none; } 
+
+form {
+    height: 60px;
+}
+
+input {
+    height: 60px;
+    width: 90%;
+    font-size: 26px;
+}
+
+input:focus {
+    outline: none;
+}
+
+button {
+    background-color: #e9d8d8;
+    height: 50px;
+    width: 9%;
+    
+}
