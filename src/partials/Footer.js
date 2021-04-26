@@ -1,27 +1,50 @@
 import React from 'react';
 import '../styles/Footer.css';
 
-class Footer extends React.Component {
-  completeAll = (e) => {
-    this.props.completeAll();
+function Footer(props)  {
+  const completeAll = (e) => {
+    props.completeAll();
   };
 
-  deleteAll = (e) => {
-    this.props.deleteAll();
+  const deleteAll = (e) => {
+    props.deleteAll();
   };
 
-  render() {
-    return (
+  const showActive = (e) => {
+    props.showActive();
+  };
+
+  const showAll = (e) => {
+    props.showAll();
+  };
+
+  const showCompleted = (e) => {
+    props.showCompleted();
+  };
+
+  return(
       <>
-        <button type='submit' className='footerBtn' onClick={this.completeAll}>
-          complete all
-        </button>
-        <button type='submit' className='footerBtn' onClick={this.deleteAll}>
-          delete all
-        </button>
+        <div>
+          <button className='footerBtn' onClick={completeAll}>
+            complete all
+          </button>
+          <button className='footerBtn' onClick={deleteAll}>
+            delete all
+          </button>
+        </div>
+        <ul className='menu'>
+          <li className='menuElement' onClick={showAll}>
+            All ({props.tasksCounter[0]})
+          </li>
+          <li className='menuElement' onClick={showActive}>
+            Active ({props.tasksCounter[2]})
+          </li>
+          <li className='menuElement' onClick={showCompleted}>
+            Completed({props.tasksCounter[1]})
+          </li>
+        </ul>
       </>
-    );
-  }
-}
+  );
+};
 
 export default Footer;

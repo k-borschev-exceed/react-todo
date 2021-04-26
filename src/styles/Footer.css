@@ -1,3 +1,12 @@
 button.footerBtn {
     width: 100px;
 }
+
+ul.menu {
+    display: flex;
+    justify-content: space-between;
+}
+
+li.menuElement {
+    font-size: 14px;
+}

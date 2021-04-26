@@ -1,14 +1,17 @@
 li {
+    display: flex;
     position: relative;
     font-size: 24px;
     border-bottom: 1px solid #ededed;
     margin-left: 0;
 }
+
+
 li:not(:first) {
     margin: 10px;
 }
 
-li.completed {
+p.completed {
     text-decoration: line-through;
 }
 
@@ -20,4 +23,18 @@ input.checkbox {
     width: 1em;
     margin: 0;
     padding: 0;
+}
+
+button.completed {
+    height: 20px;
+    align-self: center;
+    margin-left: auto;
+    text-decoration:none;
+
+}
+
+button.uncompleted {
+    display: none;
+    margin-right: 0;
+    
 }

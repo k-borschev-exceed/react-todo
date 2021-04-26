@@ -2,37 +2,70 @@ import React from 'react';
 import TaskElement from './TaskElement';
 import '../styles/List.css';
 
-class List extends React.Component {
-
-  renderTasks() {
+function List (props)  {
+  const renderHandler = () => {
     let tasksTemplate = null;
-    console.log(this.props, 'outside map')
 
-    if (this.props.tasks.length) {
-      tasksTemplate = this.props.tasks.map((item) => {       
-        console.log('item inside list')
-        console.log(item)
-        console.log(this.props, 'inside map')
-        return <TaskElement task={item.task} key={item.id} id={item.id} isCompleted={item.isCompleted} makeCompleted={this.props.makeCompleted}/>;
+    if (props.tasks.length) {
+      tasksTemplate = props.tasks.map((item) => {
+        if (props.showCondition === 'all') {
+          return (
+            <TaskElement
+              task={item.task}
+              key={item.id}
+              id={item.id}
+              isCompleted={item.isCompleted}
+              changeCompleteness={props.changeCompleteness}
+              deleteTask={props.deleteTask}
+              changeTask={props.changeTask}
+            />
+          );
+        } else if (
+          props.showCondition === 'uncompleted' &&
+          !item.isCompleted
+        ) {
+          return (
+            <TaskElement
+              task={item.task}
+              key={item.id}
+              id={item.id}
+              isCompleted={item.isCompleted}
+              changeCompleteness={props.changeCompleteness}
+              deleteTask={props.deleteTask}
+              changeTask={props.changeTask}
+            />
+          );
+        } else if (
+          props.showCondition === 'completed' &&
+          item.isCompleted
+        ) {
+          return (
+            <TaskElement
+              task={item.task}
+              key={item.id}
+              id={item.id}
+              isCompleted={item.isCompleted}
+              changeCompleteness={props.changeCompleteness}
+              deleteTask={props.deleteTask}
+              changeTask={props.changeTask}
+            />
+          );
+        }
+        return null;
       });
-    } 
-    else {
+    } else {
       tasksTemplate = <p>No tasks</p>;
     }
 
     return tasksTemplate;
-  };
+  }
 
-  render() {
-    console.log('inside list.js render method ');
-    console.log(this.props.tasks);
     return (
       <>
         <hr></hr>
-        <ul>{this.renderTasks()}</ul>
+        <ul>{renderHandler()}</ul>
       </>
     );
   }
-}
 
 export default List;
