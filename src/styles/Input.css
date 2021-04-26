@@ -1,22 +1,42 @@
 input, button{ border:none; } 
 
+div#input {
+    display: flex;
+    background-color: white;
+    box-shadow: 0 6px 15px -7px rgb(134, 133, 133);
+
+}
+
 form {
     height: 60px;
+    background-color: white;
 }
 
 input {
     height: 60px;
     width: 90%;
     font-size: 26px;
+    font-style: italic;
+
+}
+
+input::placeholder {
+    color:rgb(190, 190, 190);
 }
 
 input:focus {
     outline: none;
 }
 
-button {
-    background-color: #e9d8d8;
-    height: 50px;
-    width: 9%;
-    
+input:not([value=""]) {
+    font-style: normal;
+}
+
+button#completeAllBtn {
+    background-color: white;
+    height: 60px;
+    width: 45px;
+    background-image: url("../icons/complete_all.svg");
+    background-size: 45px 65px;
+    opacity: 0.4;
 }

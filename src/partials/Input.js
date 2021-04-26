@@ -7,27 +7,33 @@ class Input extends React.Component {
   };
 
   inputHandler = (e) => {
+    console.log(e)
     this.setState({ task: e.currentTarget.value });
   };
 
   onBtnClickHandler = (e) => {
     e.preventDefault();
-    
+
     this.setState({ task: '' });
     this.props.updateTasks(this.state.task, +new Date(), false);
   };
 
   render() {
     return (
+      <div id="input">
+      <button id="completeAllBtn" onClick={this.props.completeAll}>
+      &nbsp;
+    </button>
       <form onSubmit={this.onBtnClickHandler}>
+
         <input
           type='text'
           placeholder='What needs to be done'
           value={this.state.task}
           onChange={this.inputHandler}
         />
-        <button type='submit'>add</button>
       </form>
+      </div>
     );
   }
 }

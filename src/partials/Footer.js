@@ -1,13 +1,12 @@
 import React from 'react';
 import '../styles/Footer.css';
 
-function Footer(props)  {
-  const completeAll = (e) => {
-    props.completeAll();
-  };
+function Footer(props) {
 
-  const deleteAll = (e) => {
-    props.deleteAll();
+  const clearCompleted = (e) => {
+    props.clearCompleted();
+    console.log(props.tasksCounter[1],'TEST AFTER')
+
   };
 
   const showActive = (e) => {
@@ -21,30 +20,44 @@ function Footer(props)  {
   const showCompleted = (e) => {
     props.showCompleted();
   };
+  console.log(props.tasksCounter[1],'TEST AFTER')
 
-  return(
-      <>
-        <div>
-          <button className='footerBtn' onClick={completeAll}>
-            complete all
-          </button>
-          <button className='footerBtn' onClick={deleteAll}>
-            delete all
-          </button>
-        </div>
-        <ul className='menu'>
-          <li className='menuElement' onClick={showAll}>
-            All ({props.tasksCounter[0]})
-          </li>
-          <li className='menuElement' onClick={showActive}>
-            Active ({props.tasksCounter[2]})
-          </li>
-          <li className='menuElement' onClick={showCompleted}>
-            Completed({props.tasksCounter[1]})
-          </li>
-        </ul>
-      </>
+  return (
+    <div id ="footer">
+      <p>{props.tasksCounter[2]} items left</p>
+      <ul className='menu'>
+        <li
+          className={
+            'menuElement ' + (props.showCondition === 'all' ? 'active' : 'n')
+          }
+          onClick={showAll}
+        >
+          All
+        </li>
+        <li
+          className={
+            'menuElement ' +
+            (props.showCondition === 'uncompleted' ? 'active' : 'n')
+          }
+          onClick={showActive}
+        >
+          Active
+        </li>
+        <li
+          className={
+            'menuElement ' +
+            (props.showCondition === 'completed' ? 'active' : 'n')
+          }
+          onClick={showCompleted}
+        >
+          Completed
+        </li>
+      </ul>
+      <button className={'footerBtn ' + (!props.tasksCounter[1] ? 'hidden' : '')} onClick={clearCompleted}>
+          Clear completed
+        </button>
+    </div>
   );
-};
+}
 
 export default Footer;

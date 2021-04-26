@@ -17,6 +17,19 @@ class App extends React.Component {
     }
   };
 
+  stateTasksCounter = () => {
+    this.setState({
+      tasksCounter: [
+        this.state.tasks.length,
+        this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
+        this.state.tasks.reduce(
+          (sum, current) => sum + !current.isCompleted,
+          0
+        ),
+      ],
+    });
+  };
+
   changeCompleteness = (id, isCompleted) => {
     let tempItems = this.state.tasks;
     let index = this.findIndexById(id);
@@ -28,13 +41,7 @@ class App extends React.Component {
     };
 
     this.setState({ tasks: tempItems });
-    this.setState({
-      tasksCounter: [
-        this.state.tasks.length,
-        this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
-        this.state.tasks.reduce((sum, current) => sum + !current.isCompleted, 0),
-      ],
-    });
+    this.stateTasksCounter();
   };
 
   deleteTask = (id) => {
@@ -44,13 +51,7 @@ class App extends React.Component {
     tempItems.splice(index, 1);
 
     this.setState({ tasks: tempItems });
-    this.setState({
-      tasksCounter: [
-        this.state.tasks.length,
-        this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
-        this.state.tasks.reduce((sum, current) => sum + !current.isCompleted, 0),
-      ],
-    });
+    this.stateTasksCounter();
   };
 
   changeTask = (value, id) => {
@@ -77,31 +78,21 @@ class App extends React.Component {
     }
 
     await this.setState({ tasks: data });
-    this.setState({
-      tasksCounter: [
-        this.state.tasks.length,
-        this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
-        this.state.tasks.reduce((sum, current) => sum + !current.isCompleted, 0),
-      ],
-    });
+    this.stateTasksCounter();
   };
 
-  completeAll = () => {
+  completeAll = async () => {
     this.state.tasks.forEach((item) => {
       this.changeCompleteness(item.id, true);
     });
-    this.setState({
-      tasksCounter: [
-        this.state.tasks.length,
-        this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
-        this.state.tasks.reduce((sum, current) => sum + !current.isCompleted, 0),
-      ],
-    });
+    this.stateTasksCounter();
   };
 
-  deleteAll = () => {
-    this.setState({ tasks: [] });
-    this.setState({ tasksCounter: [0, 0, 0] });
+  clearCompleted = () => {
+    this.setState({tasksCounter: [this.state.tasksCounter[0], 0, this.state.tasksCounter[2]]})
+    let tempItems = this.state.tasks.filter((e) => !e.isCompleted);
+    console.log(tempItems, 'temp items')
+    this.setState({ tasks: tempItems });
   };
 
   showActive = () => {
@@ -120,23 +111,32 @@ class App extends React.Component {
     return (
       <div className='App'>
         <h1>todos</h1>
-        <Input updateTasks={this.updateTasks} />
-        <List
-          tasks={this.state.tasks}
-          changeCompleteness={this.changeCompleteness}
-          showCondition={this.state.showCondition}
-          deleteTask={this.deleteTask}
-          taskElemHandler={this.taskElemHandler}
-          changeTask={this.changeTask}
-        />
-        <Footer
+        <Input updateTasks={this.updateTasks}               
           completeAll={this.completeAll}
-          deleteAll={this.deleteAll}
-          showActive={this.showActive}
-          showAll={this.showAll}
-          showCompleted={this.showCompleted}
-          tasksCounter={this.state.tasksCounter}
         />
+
+        {this.state.tasks.length ? (
+          <>
+            <List
+              tasks={this.state.tasks}
+              changeCompleteness={this.changeCompleteness}
+              showCondition={this.state.showCondition}
+              deleteTask={this.deleteTask}
+              taskElemHandler={this.taskElemHandler}
+              changeTask={this.changeTask}
+            />
+            <Footer
+              clearCompleted={this.clearCompleted}
+              showActive={this.showActive}
+              showAll={this.showAll}
+              showCompleted={this.showCompleted}
+              showCondition={this.state.showCondition}
+              tasksCounter={this.state.tasksCounter}
+            />
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     );
   }

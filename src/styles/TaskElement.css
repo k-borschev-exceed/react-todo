@@ -1,40 +1,67 @@
 li {
-    display: flex;
-    position: relative;
-    font-size: 24px;
-    border-bottom: 1px solid #ededed;
-    margin-left: 0;
+  display: flex;
+  position: relative;
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
+  margin-left: 0;
+  height: 42px;
 }
-
 
 li:not(:first) {
-    margin: 10px;
+  margin: 10px;
 }
 
-p.completed {
-    text-decoration: line-through;
+p {
+    margin: auto;
+    margin-left: 15px;
+
 }
+p.completed {
+  text-decoration: line-through;
+  color: rgb(192, 189, 189);
+}
+
 
 input.checkbox {
-    background-color: ivory;
-    border: 0.1875em solid #0F1C3F;
-    border-radius: 50%;
-    height: 24px;
+    vertical-align: bottom;
     width: 1em;
-    margin: 0;
-    padding: 0;
+    height: 1em;
+    background-color: white;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    -webkit-appearance: none;
+    margin: auto;
+    margin-left: 5px;
 }
 
-button.completed {
-    height: 20px;
-    align-self: center;
-    margin-left: auto;
-    text-decoration:none;
-
+input.checkbox:checked::after {
+    content: url('../icons//complete.svg');
+    color: #03960a;
+    margin: auto;
 }
 
-button.uncompleted {
-    display: none;
-    margin-right: 0;
-    
+input.valueChanger {
+  height: 42px;
+}
+
+button.delete {
+  display: none;
+  /* I assume you'll need display: none; on initialization */
+}
+
+div#inputArea {
+  display: flex;
+  width: 100%;
+}
+
+div#inputArea:hover .delete {
+  display: block;
+  height: 42px;
+  margin-left: auto;
+  padding-right: 15px;
+  font-size: 30px;
+  background-color: white;
+  color: rgb(169, 38, 38);
+  font-weight: 100;
+
 }

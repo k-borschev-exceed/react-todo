@@ -1,6 +1,5 @@
 import React from 'react';
 import '../styles/TaskElement.css';
-
 class TaskElement extends React.Component {
   state = {
     condition: true,
@@ -16,7 +15,7 @@ class TaskElement extends React.Component {
   };
 
   submitHandler = (event) => {
-    if (event.key === 'Enter') {
+    if (event.type === 'blur' || event.key === 'Enter') {
       this.props.changeTask(this.state.newValue, this.props.id);
       this.setState({ condition: true });
     }
@@ -26,7 +25,7 @@ class TaskElement extends React.Component {
     this.props.deleteTask(this.props.id);
   };
 
-  changeCondition = () => {
+  changeCondition = (e) => {
     this.setState({ condition: false });
   };
 
@@ -40,28 +39,29 @@ class TaskElement extends React.Component {
             onChange={this.checkboxHandler}
             checked={this.props.isCompleted}
           />
-          <p
-            onDoubleClick={this.changeCondition}
-            className={(this.props.isCompleted && 'completed') || 'uncompleted'}
-          >
-            {this.props.task}
-          </p>
-          <button
-            className={(this.props.isCompleted && 'completed') || 'uncompleted'}
-            onClick={this.deleteTask}
-          >
-            {' '}
-            delete{' '}
-          </button>
+          <div id='inputArea' onDoubleClick={this.changeCondition}>
+            <p
+              className={
+                (this.props.isCompleted && 'completed') || 'uncompleted'
+              }
+            >
+              {this.props.task}
+            </p>
+            <button className={'delete'} onClick={this.deleteTask}>
+            ×
+            </button>
+          </div>
         </>
       );
     } else {
       return (
         <>
           <input
-            value={this.state.newValue}
+            className='valueChanger'
+            value={this.state.newValue || this.props.task}
             onChange={this.inputHandler}
             onKeyDown={this.submitHandler}
+            onBlur={this.submitHandler}
             type='text'
           />
         </>

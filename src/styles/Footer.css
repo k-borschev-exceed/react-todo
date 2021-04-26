@@ -1,12 +1,40 @@
 button.footerBtn {
-    width: 100px;
+  width: 120px;
+  background-color: white;
+  color: rgb(130, 129, 129);
+  margin-bottom: 8px;
+}
+
+button.hidden {
+    visibility: hidden;
+}
+
+p {
+    width: auto;
 }
 
 ul.menu {
-    display: flex;
-    justify-content: space-between;
+  width: 40%;
+  display: flex;
+  margin: auto;
+  align-items: center;
 }
 
 li.menuElement {
-    font-size: 14px;
+  margin: auto; 
+  font-size: 14px;
+  padding: 0 7px;;
+  height: 35px;
+}
+
+li.active {
+  border: 1px solid rgb(206, 203, 203);
+  border-radius: 4px;
+}
+
+div#footer {
+    display: flex;
+    width: 100%;
+    background-color: white;
+    margin: auto;
 }
