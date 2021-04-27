@@ -41,9 +41,7 @@ class TaskElement extends React.Component {
           />
           <div id='inputArea' onDoubleClick={this.changeCondition}>
             <p
-              className={
-                (this.props.isCompleted && 'completed') || 'uncompleted'
-              }
+              className= {this.props.isCompleted ? 'completed' : 'uncompleted'}
             >
               {this.props.task}
             </p>
@@ -72,8 +70,39 @@ class TaskElement extends React.Component {
   render() {
     return (
       <>
-        <li>{this.taskElemHandler(this.state.condition)}</li>
+      <li>
+      {this.state.condition ? (
+        <>
+        <input
+          type='checkbox'
+          className='checkbox'
+          onChange={this.checkboxHandler}
+          checked={this.props.isCompleted}
+        />
+        <div id='inputArea' onDoubleClick={this.changeCondition}>
+          <p
+            className= {this.props.isCompleted ? 'completed' : 'uncompleted'}
+          >
+            {this.props.task}
+          </p>
+          <button className={'delete'} onClick={this.deleteTask}>
+            ×
+          </button>
+        </div>
       </>
+      ) : (
+        <>
+          <input
+            className='valueChanger'
+            value={this.state.newValue || this.props.task}
+            onChange={this.inputHandler}
+            onKeyDown={this.submitHandler}
+            onBlur={this.submitHandler}
+            type='text'
+          />
+        </>
+      )}
+      </li>      </>
     );
   }
 }

@@ -12,9 +12,9 @@ class Input extends React.Component {
 
   onBtnClickHandler = (e) => {
     e.preventDefault();
-
-    this.setState({ task: '' });
-    this.props.updateTasks(this.state.task, +new Date(), false);
+    console.log(this.state.task, 'task state input js')
+    if (this.state.task.trim()) this.props.updateTasks(this.state.task, +new Date(), false);
+    this.setState({task: ''})
   };
 
   render() {

@@ -4,16 +4,26 @@ li {
   font-size: 24px;
   border-bottom: 1px solid #ededed;
   margin-left: 0;
-  height: 42px;
+  min-height: 42px;
+  overflow-wrap: normal;  /* не поддерживает IE, Firefox; является копией word-wrap */ 
+  word-wrap: normal;
+  word-break: normal;  /* не поддерживает Opera12.14, значение keep-all не поддерживается IE, Chrome */ 
+  line-break: auto;  /* нет поддержки для русского языка */ 
+  hyphens: manual; 
 }
 
 li:not(:first) {
   margin: 12px;
 }
 
+
+
 p {
   margin-left: 15px;
   margin-top: 8px;
+  overflow-wrap: break-word;
+  max-width: 70%;
+
 }
 p.completed {
   text-decoration: line-through;
@@ -22,7 +32,8 @@ p.completed {
 
 input.checkbox {
   vertical-align: bottom;
-  width: 1em;
+  min-width: 1em;
+  width: 1em ;
   height: 1em;
   background-color: white;
   border-radius: 50%;
@@ -56,10 +67,10 @@ div#inputArea {
 div#inputArea:hover .delete {
   display: block;
   height: 42px;
-  margin-left: auto;
   padding-right: 15px;
   font-size: 30px;
   background-color: white;
   color: rgb(169, 38, 38);
   font-weight: 100;
+  margin-left: auto;
 }

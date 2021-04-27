@@ -8,7 +8,7 @@ class App extends React.Component {
   state = {
     tasks: [],
     showCondition: 'all',
-    tasksCounter: [0, 0, 0],
+    tasksCounter: {all: 0, completed: 0, active: 0},
   };
 
   findIndexById = (id) => {
@@ -19,28 +19,28 @@ class App extends React.Component {
 
   stateTasksCounter = () => {
     this.setState({
-      tasksCounter: [
-        this.state.tasks.length,
-        this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
-        this.state.tasks.reduce(
+      tasksCounter: {
+        all : this.state.tasks.length,
+        completed : this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
+        active: this.state.tasks.reduce(
           (sum, current) => sum + !current.isCompleted,
           0
         ),
-      ],
+        },
     });
   };
 
-  changeCompleteness = (id, isCompleted) => {
-    let tempItems = this.state.tasks;
-    let index = this.findIndexById(id);
+  changeCompleteness = async (id, isCompleted) => {
 
+    let tempItems = [...this.state.tasks];
+    let index = this.findIndexById(id);
     tempItems[index] = {
       task: tempItems[index].task,
       id: tempItems[index].id,
       isCompleted: isCompleted,
     };
 
-    this.setState({ tasks: tempItems });
+    await this.setState({ tasks: tempItems });
     this.stateTasksCounter();
   };
 
@@ -70,7 +70,7 @@ class App extends React.Component {
     let data;
 
     if (completeAll) {
-      data = [...this.state.tasks].map((item) => {
+      data = this.state.tasks.map((item) => {
         return { task: item.task, id: item.id, isCompleted: true };
       });
     } else {
@@ -81,37 +81,28 @@ class App extends React.Component {
     this.stateTasksCounter();
   };
 
-  completeAll = async () => {
-    this.state.tasks.forEach((item) => {
-      this.changeCompleteness(
-        item.id,
-        !(this.state.tasksCounter[0] === this.state.tasksCounter[1])
-      );
+  completeAll = () => {
+    let tempItems = [...this.state.tasks]
+
+    tempItems.forEach((item) => {
+      item.isCompleted = !(this.state.tasksCounter.all === this.state.tasksCounter.completed)
     });
+
+    this.setState({tasks: tempItems})
     this.stateTasksCounter();
   };
 
   clearCompleted = async () => {
-    this.setState({
-      tasksCounter: [this.state.tasksCounter[0], 0, this.state.tasksCounter[2]],
-    });
     let tempItems = this.state.tasks.filter((e) => !e.isCompleted);
-    console.log(tempItems, 'temp items');
     await this.setState({ tasks: tempItems });
-    await this.stateTasksCounter();
+    this.stateTasksCounter();
   };
 
-  showActive = () => {
-    this.setState({ showCondition: 'uncompleted' });
-  };
+  showActive = () => this.setState({ showCondition: 'uncompleted' });
 
-  showAll = () => {
-    this.setState({ showCondition: 'all' });
-  };
+  showAll = () => this.setState({ showCondition: 'all' });
 
-  showCompleted = () => {
-    this.setState({ showCondition: 'completed' });
-  };
+  showCompleted = () => this.setState({ showCondition: 'completed' });
 
   render() {
     return (
@@ -121,12 +112,12 @@ class App extends React.Component {
           updateTasks={this.updateTasks}
           completeAll={this.completeAll}
           isAllCompleted={
-            this.state.tasksCounter[0] === this.state.tasksCounter[1]
+            this.state.tasksCounter.all === this.state.tasksCounter.completed
           }
-          isNotEmpty={this.state.tasksCounter[0]}
+          isNotEmpty={this.state.tasksCounter.all}
         />
 
-        {this.state.tasks.length ? (
+        {!!this.state.tasks.length &&
           <>
             <List
               tasks={this.state.tasks}
@@ -145,9 +136,7 @@ class App extends React.Component {
               tasksCounter={this.state.tasksCounter}
             />
           </>
-        ) : (
-          <></>
-        )}
+        }
       </div>
     );
   }

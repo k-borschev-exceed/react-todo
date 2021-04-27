@@ -1,57 +1,52 @@
 import React from 'react';
 import '../styles/Footer.css';
 
-function Footer(props) {
-  const clearCompleted = (e) => {
-    props.clearCompleted();
-  };
+function Footer({
+  clearCompleted,
+  showActive,
+  showAll,
+  showCompleted,
+  tasksCounter,
+  showCondition
+}) {
 
-  const showActive = (e) => {
-    props.showActive();
-  };
-
-  const showAll = (e) => {
-    props.showAll();
-  };
-
-  const showCompleted = (e) => {
-    props.showCompleted();
-  };
+  const clearCompletedF = () => clearCompleted();
+  const showActiveF = () => showActive();
+  const showAllF = () => showAll();
+  const showCompletedF = () => showCompleted();
 
   return (
     <div id='footer'>
-      <p className='itemsLeft'>{props.tasksCounter[2]} items left</p>
+      <p className='itemsLeft'>{tasksCounter.active} items left</p>
       <ul className='menu'>
         <li
           className={
-            'menuElement ' + (props.showCondition === 'all' ? 'active' : 'n')
+            `menuElement ${showCondition === 'all' ? 'active' : 'n'}`
           }
-          onClick={showAll}
+          onClick={showAllF}
         >
           All
         </li>
         <li
           className={
-            'menuElement ' +
-            (props.showCondition === 'uncompleted' ? 'active' : 'n')
+            `menuElement ${showCondition === 'uncompleted' ? 'active' : 'n'}`
           }
-          onClick={showActive}
+          onClick={showActiveF}
         >
           Active
         </li>
         <li
           className={
-            'menuElement ' +
-            (props.showCondition === 'completed' ? 'active' : 'n')
+            `menuElement ${showCondition === 'completed' ? 'active' : 'n'}`
           }
-          onClick={showCompleted}
+          onClick={showCompletedF}
         >
           Completed
         </li>
       </ul>
       <button
-        className={'footerBtn ' + (!props.tasksCounter[1] ? 'hidden' : '')}
-        onClick={clearCompleted}
+        className={`footerBtn ${!tasksCounter ? 'hidden' : ''}`}
+        onClick={clearCompletedF}
       >
         Clear completed
       </button>

@@ -8,31 +8,9 @@ function List(props) {
 
     if (props.tasks.length) {
       tasksTemplate = props.tasks.map((item) => {
-        if (props.showCondition === 'all') {
-          return (
-            <TaskElement
-              task={item.task}
-              key={item.id}
-              id={item.id}
-              isCompleted={item.isCompleted}
-              changeCompleteness={props.changeCompleteness}
-              deleteTask={props.deleteTask}
-              changeTask={props.changeTask}
-            />
-          );
-        } else if (props.showCondition === 'uncompleted' && !item.isCompleted) {
-          return (
-            <TaskElement
-              task={item.task}
-              key={item.id}
-              id={item.id}
-              isCompleted={item.isCompleted}
-              changeCompleteness={props.changeCompleteness}
-              deleteTask={props.deleteTask}
-              changeTask={props.changeTask}
-            />
-          );
-        } else if (props.showCondition === 'completed' && item.isCompleted) {
+        if ((props.showCondition === 'all')
+        || (props.showCondition === 'uncompleted' && !item.isCompleted)
+        || (props.showCondition === 'completed' && item.isCompleted)) {
           return (
             <TaskElement
               task={item.task}
@@ -50,7 +28,6 @@ function List(props) {
     } else {
       tasksTemplate = <p>No tasks</p>;
     }
-
     return tasksTemplate;
   };
 
