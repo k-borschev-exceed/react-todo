@@ -2,15 +2,21 @@ button.footerBtn {
   width: 120px;
   background-color: white;
   color: rgb(130, 129, 129);
-  margin-bottom: 8px;
+  font-size: 14px;
+
+  margin-top: 1px;
+  margin-bottom: 0px;
 }
 
 button.hidden {
-    visibility: hidden;
+  visibility: hidden;
 }
 
-p {
-    width: auto;
+p.itemsLeft {
+  width: auto;
+  color: rgb(130, 129, 129);
+  font-size: 14px;
+  margin-top: 6px;
 }
 
 ul.menu {
@@ -18,23 +24,33 @@ ul.menu {
   display: flex;
   margin: auto;
   align-items: center;
+  height: 40px;
+  color: rgb(130, 129, 129);
 }
 
 li.menuElement {
-  margin: auto; 
+  margin: auto;
+  margin-top: 3px;
+  margin-bottom: 3px;
   font-size: 14px;
-  padding: 0 7px;;
-  height: 35px;
+  height: 20px;
+  padding: 0 5px;
+  padding-bottom: 4px;
+  border: none;
 }
 
 li.active {
   border: 1px solid rgb(206, 203, 203);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 div#footer {
-    display: flex;
-    width: 100%;
-    background-color: white;
-    margin: auto;
+  display: flex;
+  width: 100%;
+  background-color: white;
+  margin: auto;
+  border: none;
+  box-shadow: 0px 1px rgb(0 0 0 / 20%), 0 8px 0 -3px #f6f6f6,
+    0 9px 1px -3px rgb(0 0 0 / 20%), 0 16px 0 -6px #f6f6f6,
+    0 17px 2px -6px rgb(0 0 0 / 20%);
 }

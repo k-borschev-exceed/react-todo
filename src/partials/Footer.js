@@ -2,11 +2,9 @@ import React from 'react';
 import '../styles/Footer.css';
 
 function Footer(props) {
-
   const clearCompleted = (e) => {
     props.clearCompleted();
-    console.log(props.tasksCounter[1],'TEST AFTER')
-
+    console.log(props.tasksCounter[1], 'TEST AFTER');
   };
 
   const showActive = (e) => {
@@ -20,11 +18,10 @@ function Footer(props) {
   const showCompleted = (e) => {
     props.showCompleted();
   };
-  console.log(props.tasksCounter[1],'TEST AFTER')
 
   return (
-    <div id ="footer">
-      <p>{props.tasksCounter[2]} items left</p>
+    <div id='footer'>
+      <p className='itemsLeft'>{props.tasksCounter[2]} items left</p>
       <ul className='menu'>
         <li
           className={
@@ -53,9 +50,12 @@ function Footer(props) {
           Completed
         </li>
       </ul>
-      <button className={'footerBtn ' + (!props.tasksCounter[1] ? 'hidden' : '')} onClick={clearCompleted}>
-          Clear completed
-        </button>
+      <button
+        className={'footerBtn ' + (!props.tasksCounter[1] ? 'hidden' : '')}
+        onClick={clearCompleted}
+      >
+        Clear completed
+      </button>
     </div>
   );
 }

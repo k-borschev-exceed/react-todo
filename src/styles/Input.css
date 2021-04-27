@@ -1,42 +1,54 @@
-input, button{ border:none; } 
+input,
+button {
+  border: none;
+}
 
 div#input {
-    display: flex;
-    background-color: white;
-    box-shadow: 0 6px 15px -7px rgb(134, 133, 133);
-
+  display: flex;
+  background-color: white;
+  box-shadow: 0 6px 15px -7px rgb(134, 133, 133);
 }
 
 form {
-    height: 60px;
-    background-color: white;
+  height: 60px;
+  background-color: white;
 }
 
 input {
-    height: 60px;
-    width: 90%;
-    font-size: 26px;
-    font-style: italic;
-
+  height: 60px;
+  width: 90%;
+  font-size: 26px;
+  font-style: italic;
 }
 
 input::placeholder {
-    color:rgb(190, 190, 190);
+  color: rgb(200, 200, 200);
 }
 
 input:focus {
-    outline: none;
+  outline: none;
 }
 
-input:not([value=""]) {
-    font-style: normal;
+input:not([value='']) {
+  font-style: normal;
+  font-weight: 100;
 }
 
 button#completeAllBtn {
-    background-color: white;
-    height: 60px;
-    width: 45px;
-    background-image: url("../icons/complete_all.svg");
-    background-size: 45px 65px;
-    opacity: 0.4;
+  background-color: white;
+  margin-top: 8px;
+  height: 40px;
+  width: 45px;
+  background-image: url('../icons/complete_all.png');
+  background-size: 45px 45px;
+  opacity: 0.2;
+}
+
+button#completeAllBtn.completed {
+  opacity: 0.6;
+}
+
+button#completeAllBtn.empty {
+  visibility: hidden !important;
+  opacity: 0;
 }

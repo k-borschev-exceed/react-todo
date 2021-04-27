@@ -7,7 +7,7 @@ class Input extends React.Component {
   };
 
   inputHandler = (e) => {
-    console.log(e)
+    console.log(e);
     this.setState({ task: e.currentTarget.value });
   };
 
@@ -20,19 +20,28 @@ class Input extends React.Component {
 
   render() {
     return (
-      <div id="input">
-      <button id="completeAllBtn" onClick={this.props.completeAll}>
-      &nbsp;
-    </button>
-      <form onSubmit={this.onBtnClickHandler}>
-
-        <input
-          type='text'
-          placeholder='What needs to be done'
-          value={this.state.task}
-          onChange={this.inputHandler}
-        />
-      </form>
+      <div id='input'>
+        <button
+          id='completeAllBtn'
+          onClick={this.props.completeAll}
+          className={
+            this.props.isAllCompleted && this.props.isNotEmpty
+              ? 'completed '
+              : this.props.isNotEmpty
+              ? ''
+              : 'empty'
+          }
+        >
+          &nbsp;
+        </button>
+        <form onSubmit={this.onBtnClickHandler}>
+          <input
+            type='text'
+            placeholder='What needs to be done'
+            value={this.state.task}
+            onChange={this.inputHandler}
+          />
+        </form>
       </div>
     );
   }

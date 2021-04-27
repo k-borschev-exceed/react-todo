@@ -48,7 +48,7 @@ class TaskElement extends React.Component {
               {this.props.task}
             </p>
             <button className={'delete'} onClick={this.deleteTask}>
-            ×
+              ×
             </button>
           </div>
         </>

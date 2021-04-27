@@ -8,36 +8,35 @@ li {
 }
 
 li:not(:first) {
-  margin: 10px;
+  margin: 12px;
 }
 
 p {
-    margin: auto;
-    margin-left: 15px;
-
+  margin-left: 15px;
+  margin-top: 8px;
 }
 p.completed {
   text-decoration: line-through;
   color: rgb(192, 189, 189);
 }
 
-
 input.checkbox {
-    vertical-align: bottom;
-    width: 1em;
-    height: 1em;
-    background-color: white;
-    border-radius: 50%;
-    border: 1px solid #ddd;
-    -webkit-appearance: none;
-    margin: auto;
-    margin-left: 5px;
+  vertical-align: bottom;
+  width: 1em;
+  height: 1em;
+  background-color: white;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  -webkit-appearance: none;
+  margin: auto;
+  margin-left: 5px;
 }
 
 input.checkbox:checked::after {
-    content: url('../icons//complete.svg');
-    color: #03960a;
-    margin: auto;
+  content: url('../icons//complete.png');
+  color: #03960a;
+
+  margin: auto;
 }
 
 input.valueChanger {
@@ -63,5 +62,4 @@ div#inputArea:hover .delete {
   background-color: white;
   color: rgb(169, 38, 38);
   font-weight: 100;
-
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import TaskElement from './TaskElement';
 import '../styles/List.css';
 
-function List (props)  {
+function List(props) {
   const renderHandler = () => {
     let tasksTemplate = null;
 
@@ -20,10 +20,7 @@ function List (props)  {
               changeTask={props.changeTask}
             />
           );
-        } else if (
-          props.showCondition === 'uncompleted' &&
-          !item.isCompleted
-        ) {
+        } else if (props.showCondition === 'uncompleted' && !item.isCompleted) {
           return (
             <TaskElement
               task={item.task}
@@ -35,10 +32,7 @@ function List (props)  {
               changeTask={props.changeTask}
             />
           );
-        } else if (
-          props.showCondition === 'completed' &&
-          item.isCompleted
-        ) {
+        } else if (props.showCondition === 'completed' && item.isCompleted) {
           return (
             <TaskElement
               task={item.task}
@@ -58,14 +52,14 @@ function List (props)  {
     }
 
     return tasksTemplate;
-  }
+  };
 
-    return (
-      <>
-        <hr></hr>
-        <ul>{renderHandler()}</ul>
-      </>
-    );
-  }
+  return (
+    <>
+      <hr></hr>
+      <ul>{renderHandler()}</ul>
+    </>
+  );
+}
 
 export default List;
