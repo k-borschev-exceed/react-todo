@@ -7,7 +7,6 @@ class Input extends React.Component {
   };
 
   inputHandler = (e) => {
-    console.log(e);
     this.setState({ task: e.currentTarget.value });
   };
 

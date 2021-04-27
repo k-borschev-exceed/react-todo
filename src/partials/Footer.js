@@ -4,7 +4,6 @@ import '../styles/Footer.css';
 function Footer(props) {
   const clearCompleted = (e) => {
     props.clearCompleted();
-    console.log(props.tasksCounter[1], 'TEST AFTER');
   };
 
   const showActive = (e) => {
