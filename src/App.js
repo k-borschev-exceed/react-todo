@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import Input from './partials/Input';
-import List from './partials/List';
-import Footer from './partials/Footer';
+import Input from './components/Input';
+import List from './components/List';
+import Footer from './components/Footer';
 
-class App extends React.Component {
+export default class App extends React.Component {
   state = {
     tasks: [],
     showCondition: 'all',
@@ -141,5 +141,3 @@ class App extends React.Component {
     );
   }
 }
-
-export default App;

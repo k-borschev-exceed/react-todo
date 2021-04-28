@@ -39,7 +39,7 @@ button#completeAllBtn {
   margin-top: 8px;
   height: 40px;
   width: 45px;
-  background-image: url('../icons/complete_all.png');
+  background-image: url('./complete_all.png');
   background-size: 45px 45px;
   opacity: 0.2;
 }

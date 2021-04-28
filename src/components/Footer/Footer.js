@@ -1,7 +1,7 @@
 import React from 'react';
-import '../styles/Footer.css';
+import './Footer.css';
 
-function Footer({
+export default function Footer({
   clearCompleted,
   showActive,
   showAll,
@@ -53,5 +53,3 @@ function Footer({
     </div>
   );
 }
-
-export default Footer;

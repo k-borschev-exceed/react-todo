@@ -1,7 +1,7 @@
 import React from 'react';
-import '../styles/Input.css';
+import './Input.css';
 
-class Input extends React.Component {
+export default class Input extends React.Component {
   state = {
     task: '',
   };
@@ -45,5 +45,3 @@ class Input extends React.Component {
     );
   }
 }
-
-export default Input;

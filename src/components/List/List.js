@@ -1,8 +1,8 @@
 import React from 'react';
-import TaskElement from './TaskElement';
-import '../styles/List.css';
+import TaskElement from '../TaskElement/TaskElement';
+import './List.css';
 
-function List(props) {
+export default function List(props) {
   const renderHandler = () => {
     let tasksTemplate = null;
 
@@ -39,4 +39,3 @@ function List(props) {
   );
 }
 
-export default List;
