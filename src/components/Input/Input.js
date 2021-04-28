@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Input.css';
 
 export default function Input({
-  updateTasks,
+  addTask,
   completeAll,
   isNotEmpty,
   isAllCompleted,
@@ -15,7 +15,7 @@ export default function Input({
 
   const onBtnClickHandler = (e) => {
     e.preventDefault();
-    if (task.trim()) updateTasks(task, +new Date(), false);
+    if (task.trim()) addTask(task, +new Date(), false);
     setTask('');
   };
 

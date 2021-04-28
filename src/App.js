@@ -11,6 +11,16 @@ export default class App extends React.Component {
     tasksCounter: { all: 0, completed: 0, active: 0 },
   };
 
+  componentDidMount() {
+    fetch('/todos/')
+      .then((res) => res.json())
+      .then((tasks) => {
+        tasks.forEach((item) => (item.id = item.key));
+        this.setState({ tasks });
+        this.stateTasksCounter();
+      });
+  }
+
   findIndexById = (id) => {
     for (let i = 0; i < this.state.tasks.length; i++) {
       if (id === this.state.tasks[i].id) return i;
@@ -34,6 +44,14 @@ export default class App extends React.Component {
   };
 
   changeCompleteness = async (id, isCompleted) => {
+    fetch('/todos/', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify({ key: id, isCompleted: isCompleted }),
+    });
     let tempItems = [...this.state.tasks];
     let index = this.findIndexById(id);
     tempItems[index] = {
@@ -47,6 +65,14 @@ export default class App extends React.Component {
   };
 
   deleteTask = (id) => {
+    fetch('/todos/', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+      body: JSON.stringify({ key: id }),
+    });
     let index = this.findIndexById(id);
     let tempItems = this.state.tasks;
 
@@ -57,6 +83,14 @@ export default class App extends React.Component {
   };
 
   changeTask = (value, id) => {
+    fetch('/todos/', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify({ key: id, task: value }),
+    });
     let tempItems = this.state.tasks;
     let index = this.findIndexById(id);
 
@@ -68,16 +102,19 @@ export default class App extends React.Component {
     this.setState({ tasks: tempItems });
   };
 
-  updateTasks = async (task, id, isCompleted, completeAll) => {
-    let data;
-
-    if (completeAll) {
-      data = this.state.tasks.map((item) => {
-        return { task: item.task, id: item.id, isCompleted: true };
+  addTask = async (task, id, isCompleted) => {
+    fetch('/todos/', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ task, isCompleted, key: id }),
+    })
+      .catch(function (res) {
+        console.log(res);
       });
-    } else {
-      data = [...this.state.tasks, { task, id, isCompleted }];
-    }
+    let data = [...this.state.tasks, { task, id, isCompleted }];
 
     await this.setState({ tasks: data });
     this.stateTasksCounter();
@@ -90,6 +127,15 @@ export default class App extends React.Component {
       item.isCompleted = !(
         this.state.tasksCounter.all === this.state.tasksCounter.completed
       );
+
+      fetch('/todos/', {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        method: 'PATCH',
+        body: JSON.stringify({ key: item.id, isCompleted: item.isCompleted }),
+      });
     });
 
     this.setState({ tasks: tempItems });
@@ -113,7 +159,7 @@ export default class App extends React.Component {
       <div className='App'>
         <h1>todos</h1>
         <Input
-          updateTasks={this.updateTasks}
+          addTask={this.addTask}
           completeAll={this.completeAll}
           isAllCompleted={
             this.state.tasksCounter.all === this.state.tasksCounter.completed
