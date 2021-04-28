@@ -8,7 +8,7 @@ export default class App extends React.Component {
   state = {
     tasks: [],
     showCondition: 'all',
-    tasksCounter: {all: 0, completed: 0, active: 0},
+    tasksCounter: { all: 0, completed: 0, active: 0 },
   };
 
   findIndexById = (id) => {
@@ -20,18 +20,20 @@ export default class App extends React.Component {
   stateTasksCounter = () => {
     this.setState({
       tasksCounter: {
-        all : this.state.tasks.length,
-        completed : this.state.tasks.reduce((sum, current) => sum + current.isCompleted, 0),
+        all: this.state.tasks.length,
+        completed: this.state.tasks.reduce(
+          (sum, current) => sum + current.isCompleted,
+          0
+        ),
         active: this.state.tasks.reduce(
           (sum, current) => sum + !current.isCompleted,
           0
         ),
-        },
+      },
     });
   };
 
   changeCompleteness = async (id, isCompleted) => {
-
     let tempItems = [...this.state.tasks];
     let index = this.findIndexById(id);
     tempItems[index] = {
@@ -82,13 +84,15 @@ export default class App extends React.Component {
   };
 
   completeAll = () => {
-    let tempItems = [...this.state.tasks]
+    let tempItems = [...this.state.tasks];
 
     tempItems.forEach((item) => {
-      item.isCompleted = !(this.state.tasksCounter.all === this.state.tasksCounter.completed)
+      item.isCompleted = !(
+        this.state.tasksCounter.all === this.state.tasksCounter.completed
+      );
     });
 
-    this.setState({tasks: tempItems})
+    this.setState({ tasks: tempItems });
     this.stateTasksCounter();
   };
 
@@ -117,7 +121,7 @@ export default class App extends React.Component {
           isNotEmpty={this.state.tasksCounter.all}
         />
 
-        {!!this.state.tasks.length &&
+        {!!this.state.tasks.length && (
           <>
             <List
               tasks={this.state.tasks}
@@ -136,7 +140,7 @@ export default class App extends React.Component {
               tasksCounter={this.state.tasksCounter}
             />
           </>
-        }
+        )}
       </div>
     );
   }

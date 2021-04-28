@@ -7,9 +7,8 @@ export default function Footer({
   showAll,
   showCompleted,
   tasksCounter,
-  showCondition
+  showCondition,
 }) {
-
   const clearCompletedF = () => clearCompleted();
   const showActiveF = () => showActive();
   const showAllF = () => showAll();
@@ -20,25 +19,23 @@ export default function Footer({
       <p className='itemsLeft'>{tasksCounter.active} items left</p>
       <ul className='menu'>
         <li
-          className={
-            `menuElement ${showCondition === 'all' ? 'active' : 'n'}`
-          }
+          className={`menuElement ${showCondition === 'all' ? 'active' : 'n'}`}
           onClick={showAllF}
         >
           All
         </li>
         <li
-          className={
-            `menuElement ${showCondition === 'uncompleted' ? 'active' : 'n'}`
-          }
+          className={`menuElement ${
+            showCondition === 'uncompleted' ? 'active' : 'n'
+          }`}
           onClick={showActiveF}
         >
           Active
         </li>
         <li
-          className={
-            `menuElement ${showCondition === 'completed' ? 'active' : 'n'}`
-          }
+          className={`menuElement ${
+            showCondition === 'completed' ? 'active' : 'n'
+          }`}
           onClick={showCompletedF}
         >
           Completed

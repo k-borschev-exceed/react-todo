@@ -8,9 +8,11 @@ export default function List(props) {
 
     if (props.tasks.length) {
       tasksTemplate = props.tasks.map((item) => {
-        if ((props.showCondition === 'all')
-        || (props.showCondition === 'uncompleted' && !item.isCompleted)
-        || (props.showCondition === 'completed' && item.isCompleted)) {
+        if (
+          props.showCondition === 'all' ||
+          (props.showCondition === 'uncompleted' && !item.isCompleted) ||
+          (props.showCondition === 'completed' && item.isCompleted)
+        ) {
           return (
             <TaskElement
               task={item.task}
@@ -38,4 +40,3 @@ export default function List(props) {
     </>
   );
 }
-

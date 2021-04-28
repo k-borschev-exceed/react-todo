@@ -7,9 +7,9 @@ li.taskElement {
   min-height: 42px;
   overflow-wrap: break-word !important;
   word-wrap: break-word !important;
-  word-break: break-all !important; 
-  line-break: auto !important;   
-  hyphens: manual !important; 
+  word-break: break-all !important;
+  line-break: auto !important;
+  hyphens: manual !important;
 }
 
 li:not(:first) {
@@ -22,8 +22,6 @@ p.taskvalue {
   overflow-wrap: break-word;
   max-width: 70% !important;
   min-width: 70% !important;
-
-
 }
 p.completed {
   text-decoration: line-through;
@@ -33,7 +31,7 @@ p.completed {
 input.checkbox {
   vertical-align: bottom;
   min-width: 1em;
-  width: 1em ;
+  width: 1em;
   height: 1em;
   background-color: white;
   border-radius: 50%;

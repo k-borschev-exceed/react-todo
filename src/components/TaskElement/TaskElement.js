@@ -1,63 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './TaskElement.css';
-export default class TaskElement extends React.Component {
-  state = {
-    inputCondition: true,
-    newValue: '',
-  };
+export default function TaskElement({
+  id,
+  isCompleted,
+  deleteTask,
+  changeCompleteness,
+  changeTask,
+  task,
+}) {
+  const [inputCondition, setInputCondition] = useState(true);
+  const [newValue, setNewValue] = useState('');
 
-  inputHandler = (e) => this.setState({ newValue: e.currentTarget.value });
+  const inputHandler = (e) => setNewValue(e.currentTarget.value);
 
-  checkboxHandler = () => this.props.changeCompleteness(this.props.id, !this.props.isCompleted);
+  const checkboxHandler = () => changeCompleteness(id, !isCompleted);
 
-  submitHandler = (event) => {
+  const submitHandler = (event) => {
     if (event.type === 'blur' || event.key === 'Enter') {
-      this.props.changeTask(this.state.newValue, this.props.id);
-      this.setState({ inputCondition: true });
+      changeTask(newValue, id);
+      setInputCondition(true);
     }
   };
 
-  deleteTask = () => this.props.deleteTask(this.props.id);
+  const deleteTaskF = () => deleteTask(id);
 
-  changeCondition = () => this.setState({ inputCondition: false });
+  const changeCondition = () => setInputCondition(false);
 
-  render() {
-    return (
-      <>
-      <li className="taskElement">
-      {this.state.inputCondition ? (
-        <>
-        <input
-          type='checkbox'
-          className='checkbox'
-          onChange={this.checkboxHandler}
-          checked={this.props.isCompleted}
-        />
-        <div id='inputArea' onDoubleClick={this.changeCondition}>
-          <p
-            className= {this.props.isCompleted ? 'completed taskvalue' : 'uncompleted taskvalue'}
-          >
-            {this.props.task}
-          </p>
-          <button className={'delete'} onClick={this.deleteTask}>
-            ×
-          </button>
-        </div>
-      </>
-      ) : (
-        <>
-          <input
-            className='valueChanger'
-            value={this.state.newValue || this.props.task}
-            onChange={this.inputHandler}
-            onKeyDown={this.submitHandler}
-            onBlur={this.submitHandler}
-            type='text'
-          />
-        </>
-      )}
-      </li>      </>
-    );
-  }
+  return (
+    <>
+      <li className='taskElement'>
+        {inputCondition ? (
+          <>
+            <input
+              type='checkbox'
+              className='checkbox'
+              onChange={checkboxHandler}
+              checked={isCompleted}
+            />
+            <div id='inputArea' onDoubleClick={changeCondition}>
+              <p
+                className={
+                  isCompleted ? 'completed taskvalue' : 'uncompleted taskvalue'
+                }
+              >
+                {task}
+              </p>
+              <button className={'delete'} onClick={deleteTaskF}>
+                ×
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <input
+              className='valueChanger'
+              value={newValue || task}
+              onChange={inputHandler}
+              onKeyDown={submitHandler}
+              onBlur={submitHandler}
+              type='text'
+            />
+          </>
+        )}
+      </li>
+    </>
+  );
 }
-
