@@ -15,7 +15,7 @@ export default function Input({
 
   const onBtnClickHandler = (e) => {
     e.preventDefault();
-    if (task.trim()) addTask(task, +new Date(), false);
+    if (task.trim()) addTask(task, false);
     setTask('');
   };
 

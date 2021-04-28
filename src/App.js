@@ -4,6 +4,8 @@ import Input from './components/Input';
 import List from './components/List';
 import Footer from './components/Footer';
 
+//обновлять каждый раз список, а кей - _id mongodb
+
 export default class App extends React.Component {
   state = {
     tasks: [],
@@ -12,14 +14,31 @@ export default class App extends React.Component {
   };
 
   componentDidMount() {
-    fetch('/todos/')
+    this.fetchTasks();
+  }
+
+  fetchTasks = async () => {
+    fetch('/tasks/')
       .then((res) => res.json())
-      .then((tasks) => {
-        tasks.forEach((item) => (item.id = item.key));
-        this.setState({ tasks });
+      .then(async (tasks) => {
+        await this.setState({ tasks });
         this.stateTasksCounter();
       });
-  }
+  };
+
+  addTask = async (title, isCompleted) => {
+    await fetch('/tasks/', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ title, isCompleted }),
+    }).catch(function (err) {
+      console.log(err);
+    });
+    await this.fetchTasks();
+  };
 
   findIndexById = (id) => {
     for (let i = 0; i < this.state.tasks.length; i++) {
@@ -44,80 +63,50 @@ export default class App extends React.Component {
   };
 
   changeCompleteness = async (id, isCompleted) => {
-    fetch('/todos/', {
+    fetch('/tasks/', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       method: 'PATCH',
-      body: JSON.stringify({ key: id, isCompleted: isCompleted }),
+      body: JSON.stringify([{ id: id, isCompleted: isCompleted }]),
     });
     let tempItems = [...this.state.tasks];
     let index = this.findIndexById(id);
     tempItems[index] = {
-      task: tempItems[index].task,
+      title: tempItems[index].title,
       id: tempItems[index].id,
       isCompleted: isCompleted,
     };
 
     await this.setState({ tasks: tempItems });
     this.stateTasksCounter();
+    await this.fetchTasks();
   };
 
-  deleteTask = (id) => {
-    fetch('/todos/', {
+  deleteTask = async (id) => {
+    await fetch('/tasks/', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       method: 'DELETE',
-      body: JSON.stringify({ key: id }),
+      body: JSON.stringify([{ id: id }]),
     });
-    let index = this.findIndexById(id);
-    let tempItems = this.state.tasks;
-
-    tempItems.splice(index, 1);
-
-    this.setState({ tasks: tempItems });
-    this.stateTasksCounter();
+    await this.fetchTasks();
+    await this.fetchTasks(); // по неизвестной причине не всегда срабатывает с первого раза
   };
 
-  changeTask = (value, id) => {
-    fetch('/todos/', {
+  changeTask = async (value, id) => {
+    fetch('/tasks/', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
       method: 'PATCH',
-      body: JSON.stringify({ key: id, task: value }),
+      body: JSON.stringify([{ id: id, title: value }]),
     });
-    let tempItems = this.state.tasks;
-    let index = this.findIndexById(id);
-
-    tempItems[index] = {
-      task: value,
-      id: tempItems[index].id,
-      isCompleted: tempItems[index].isCompleted,
-    };
-    this.setState({ tasks: tempItems });
-  };
-
-  addTask = async (task, id, isCompleted) => {
-    fetch('/todos/', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({ task, isCompleted, key: id }),
-    })
-      .catch(function (res) {
-        console.log(res);
-      });
-    let data = [...this.state.tasks, { task, id, isCompleted }];
-
-    await this.setState({ tasks: data });
-    this.stateTasksCounter();
+    await this.fetchTasks();
   };
 
   completeAll = () => {
@@ -127,23 +116,36 @@ export default class App extends React.Component {
       item.isCompleted = !(
         this.state.tasksCounter.all === this.state.tasksCounter.completed
       );
-
-      fetch('/todos/', {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        method: 'PATCH',
-        body: JSON.stringify({ key: item.id, isCompleted: item.isCompleted }),
-      });
     });
 
+    fetch('/tasks/', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify(
+        tempItems.map((e) => {
+          return { isCompleted: e.isCompleted, id: e.id };
+        })
+      ),
+    });
     this.setState({ tasks: tempItems });
     this.stateTasksCounter();
   };
 
   clearCompleted = async () => {
     let tempItems = this.state.tasks.filter((e) => !e.isCompleted);
+    fetch('/tasks/', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+      body: JSON.stringify(
+        this.state.tasks.filter((x) => tempItems.indexOf(x) === -1)
+      ),
+    });
     await this.setState({ tasks: tempItems });
     this.stateTasksCounter();
   };

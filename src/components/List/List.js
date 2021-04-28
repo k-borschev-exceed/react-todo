@@ -15,7 +15,7 @@ export default function List(props) {
         ) {
           return (
             <TaskElement
-              task={item.task}
+              title={item.title}
               key={item.id}
               id={item.id}
               isCompleted={item.isCompleted}

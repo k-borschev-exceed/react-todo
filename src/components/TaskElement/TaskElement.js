@@ -6,7 +6,7 @@ export default function TaskElement({
   deleteTask,
   changeCompleteness,
   changeTask,
-  task,
+  title,
 }) {
   const [inputCondition, setInputCondition] = useState(true);
   const [newValue, setNewValue] = useState('');
@@ -43,7 +43,7 @@ export default function TaskElement({
                   isCompleted ? 'completed taskvalue' : 'uncompleted taskvalue'
                 }
               >
-                {task}
+                {title}
               </p>
               <button className={'delete'} onClick={deleteTaskF}>
                 ×
@@ -54,7 +54,7 @@ export default function TaskElement({
           <>
             <input
               className='valueChanger'
-              value={newValue || task}
+              value={newValue || title}
               onChange={inputHandler}
               onKeyDown={submitHandler}
               onBlur={submitHandler}
