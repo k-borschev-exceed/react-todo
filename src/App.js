@@ -17,26 +17,28 @@ export default class App extends React.Component {
   };
 
   componentDidMount  = async () => {
-    await this.checkAuth();
+    // await this.checkAuth();
     await this.fetchTasks();
     await this.checkUser();
   }
 
-  checkAuth = async () => {
-    fetch('/checkAuth')
-      .then((res) => res.text())
-      .then(async (isLoggedin) => {
-        console.log(isLoggedin);
-        isLoggedin = isLoggedin === 'true';
-        console.log(typeof isLoggedin)
-        await this.setState({ isLoggedin });
-      });
-  };
+  // checkAuth = async () => {
+  //   fetch('/checkAuth')
+  //     .then((res) => res.text())
+  //     .then(async (isLoggedin) => {
+  //       console.log(isLoggedin);
+  //       isLoggedin = isLoggedin === 'true';
+  //       console.log(typeof isLoggedin)
+  //       await this.setState({ isLoggedin });
+  //     });
+  // };
 
   fetchTasks = async () => {
+    console.log('FETCH TASKS')
     fetch('/tasks/')
       .then((res) => res.json())
       .then(async (tasks) => {
+        console.log(tasks, 'TASKS')
         await this.setState({ tasks });
         this.stateTasksCounter();
       });
@@ -46,13 +48,19 @@ export default class App extends React.Component {
     fetch('/checkUser/')
     .then((res) => res.json())
     .then(async (user) => {
+      console.log(document.cookie, 'COOKIE')
       console.log(user)
       await this.setState({ userName: user.email });
+      console.log('dolgo')
+      await this.setState({isLoggedin: !!user.email})
+      console.log('very dolgo')
+      await this.fetchTasks();
+      console.log(document.cookie, 'COOKIE')
+
     });
   }
 
   loginHandler = async (e) => { 
-    await this.checkAuth() 
     await this.checkUser()
   }
 
@@ -61,17 +69,17 @@ export default class App extends React.Component {
   setLogin = () => this.setState({logOrSignUp: 'login'})
 
   signupHandler = async (e) => {
-     await this.checkAuth()
+    //  await this.checkAuth()
      await this.checkUser()
   }
 
-  logout = async (e) => {
+  logout = async () => {
     try {
       await fetch('/logout')
     } catch (err) {
       console.log(err);
     }
-    await this.checkAuth();
+    // await this.checkAuth();
   }
 
   addTask = async (title, isCompleted) => {
