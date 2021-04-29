@@ -9,13 +9,14 @@ export default function TaskElement({
   title,
 }) {
   const [inputCondition, setInputCondition] = useState(true);
-  const [newValue, setNewValue] = useState('');
+  const [newValue, setNewValue] = useState(title);
 
   const inputHandler = (e) => setNewValue(e.currentTarget.value);
 
   const checkboxHandler = () => changeCompleteness(id, !isCompleted);
 
   const submitHandler = (event) => {
+    console.log(event.type === 'blur' || event.key === 'Enter')
     if (event.type === 'blur' || event.key === 'Enter') {
       changeTask(newValue, id);
       setInputCondition(true);
@@ -54,7 +55,7 @@ export default function TaskElement({
           <>
             <input
               className='valueChanger'
-              value={newValue || title}
+              value={newValue}
               onChange={inputHandler}
               onKeyDown={submitHandler}
               onBlur={submitHandler}
