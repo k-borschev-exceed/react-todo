@@ -8,11 +8,13 @@ export default function Footer({
   showCompleted,
   tasksCounter,
   showCondition,
+  logout
 }) {
   const clearCompletedF = () => clearCompleted();
   const showActiveF = () => showActive();
   const showAllF = () => showAll();
   const showCompletedF = () => showCompleted();
+  const logoutF = () => logout();
 
   return (
     <div id='footer'>
@@ -47,6 +49,7 @@ export default function Footer({
       >
         Clear completed
       </button>
+      <button className="footerBtn logout" onClick={logoutF}>Logout</button>
     </div>
   );
 }

@@ -3,19 +3,35 @@ import './App.css';
 import Input from './components/Input';
 import List from './components/List';
 import Footer from './components/Footer';
-
-//обновлять каждый раз список, а кей - _id mongodb
+import Login from './components/Login';
+import Signup from './components/Signup';
 
 export default class App extends React.Component {
   state = {
     tasks: [],
     showCondition: 'all',
     tasksCounter: { all: 0, completed: 0, active: 0 },
+    isLoggedin: false,
+    logOrSignUp : 'login',
+    userName: false
   };
 
-  componentDidMount() {
-    this.fetchTasks();
+  componentDidMount  = async () => {
+    await this.checkAuth();
+    await this.fetchTasks();
+    await this.checkUser();
   }
+
+  checkAuth = async () => {
+    fetch('/checkAuth')
+      .then((res) => res.text())
+      .then(async (isLoggedin) => {
+        console.log(isLoggedin);
+        isLoggedin = isLoggedin === 'true';
+        console.log(typeof isLoggedin)
+        await this.setState({ isLoggedin });
+      });
+  };
 
   fetchTasks = async () => {
     fetch('/tasks/')
@@ -25,6 +41,38 @@ export default class App extends React.Component {
         this.stateTasksCounter();
       });
   };
+
+  checkUser = async () => {
+    fetch('/checkUser/')
+    .then((res) => res.json())
+    .then(async (user) => {
+      console.log(user)
+      await this.setState({ userName: user.email });
+    });
+  }
+
+  loginHandler = async (e) => { 
+    await this.checkAuth() 
+    await this.checkUser()
+  }
+
+  setSignup = () => this.setState({logOrSignUp: 'signup'})
+
+  setLogin = () => this.setState({logOrSignUp: 'login'})
+
+  signupHandler = async (e) => {
+     await this.checkAuth()
+     await this.checkUser()
+  }
+
+  logout = async (e) => {
+    try {
+      await fetch('/logout')
+    } catch (err) {
+      console.log(err);
+    }
+    await this.checkAuth();
+  }
 
   addTask = async (title, isCompleted) => {
     await fetch('/tasks/', {
@@ -160,6 +208,9 @@ export default class App extends React.Component {
     return (
       <div className='App'>
         <h1>todos</h1>
+        {this.state.isLoggedin && (
+          <>
+        <p className="username">Logged as {this.state.userName}</p>
         <Input
           addTask={this.addTask}
           completeAll={this.completeAll}
@@ -168,7 +219,7 @@ export default class App extends React.Component {
           }
           isNotEmpty={this.state.tasksCounter.all}
         />
-
+        
         {!!this.state.tasks.length && (
           <>
             <List
@@ -186,9 +237,15 @@ export default class App extends React.Component {
               showCompleted={this.showCompleted}
               showCondition={this.state.showCondition}
               tasksCounter={this.state.tasksCounter}
+              logout={this.logout}
             />
           </>
         )}
+        </>
+        )}
+        {!this.state.isLoggedin &&  this.state.logOrSignUp === 'login' && (<Login setSignup={this.setSignup} loginHandler={this.loginHandler}/>)}
+        {!this.state.isLoggedin &&  this.state.logOrSignUp === 'signup' && (<Signup setLogin={this.setLogin} signupHandler={this.signupHandler}/>)}
+          
       </div>
     );
   }

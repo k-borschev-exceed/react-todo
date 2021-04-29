@@ -37,7 +37,7 @@ export default function Input({
       <form onSubmit={onBtnClickHandler}>
         <input
           type='text'
-          placeholder='What needs to be done'
+          placeholder={`What needs to be done`}
           value={task}
           onChange={inputHandler}
         />
