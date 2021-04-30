@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './Login.css';
 
 export default function Login(props) {
-
   const [email, setEmail] = useState('');
   const [emailErrors, setEmailErrors] = useState('');
 
@@ -22,38 +21,40 @@ export default function Login(props) {
         setEmailErrors(data.errors.email);
         setPasswordErrors(data.errors.password);
       }
-      if (data.user) {
-        props.loginHandler();
+      if (data.userId && data.token) {
+        localStorage.setItem('auth', JSON.stringify(data));
+        props.checkAuth();
       }
     } catch (err) {
       console.log(err);
     }
   };
 
-    return (
-      <div className='login'>
-        <form onSubmit={loginHandler}>
-          <div className='loginMenu'>
-            <h2>{'Login'}</h2>
-            <h2 onClick={props.setSignup} className='unactive'>
-            {'/Signup'}</h2>
-          </div>
-          <label>Email</label>
-          <input
-            type='text'
-            value={email}
-            onChange={(e) => setEmail(e.currentTarget.value)}
-          />
-          <div className='email error'>{emailErrors}</div>
-          <label>Password</label> 
-          <input
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
-          <div className='password error'>{passwordErrors}</div>
-          <button>Login</button>
-        </form>
-      </div>
-    )
+  return (
+    <div className='login'>
+      <form onSubmit={loginHandler}>
+        <div className='loginMenu'>
+          <h2>{'Login'}</h2>
+          <h2 onClick={props.setSignup} className='unactive'>
+            {'/Signup'}
+          </h2>
+        </div>
+        <label>Email</label>
+        <input
+          type='text'
+          value={email}
+          onChange={(e) => setEmail(e.currentTarget.value)}
+        />
+        <div className='email error'>{emailErrors}</div>
+        <label>Password</label>
+        <input
+          type='password'
+          value={password}
+          onChange={(e) => setPassword(e.currentTarget.value)}
+        />
+        <div className='password error'>{passwordErrors}</div>
+        <button>Login</button>
+      </form>
+    </div>
+  );
 }

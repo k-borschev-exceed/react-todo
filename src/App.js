@@ -6,90 +6,85 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Signup from './components/Signup';
 
+//под кнопками логин и сайнап сделать already have an acc...
+//меньше инпуты
+//ocnf pass
+
 export default class App extends React.Component {
   state = {
     tasks: [],
     showCondition: 'all',
     tasksCounter: { all: 0, completed: 0, active: 0 },
     isLoggedin: false,
-    logOrSignUp : 'login',
-    userName: false
+    logOrSignUp: 'login',
   };
 
-  componentDidMount  = async () => {
-    // await this.checkAuth();
-    await this.fetchTasks();
-    await this.checkUser();
-  }
+  componentDidMount = async () => {
+    await this.checkAuth();
+    if (this.state.isLoggedin) {
+      await this.fetchTasks();
+    }
+  };
 
-  // checkAuth = async () => {
-  //   fetch('/checkAuth')
-  //     .then((res) => res.text())
-  //     .then(async (isLoggedin) => {
-  //       console.log(isLoggedin);
-  //       isLoggedin = isLoggedin === 'true';
-  //       console.log(typeof isLoggedin)
-  //       await this.setState({ isLoggedin });
-  //     });
-  // };
+  checkAuth = async () => {
+    if (localStorage['auth']) {
+      const token = JSON.parse(localStorage['auth']).token;
+      const id = JSON.parse(localStorage['auth']).userId;
+
+      const res = await fetch('/verifyToken', {
+        method: 'POST',
+        body: JSON.stringify({ token, id }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+
+      this.setState({ isLoggedin: data.status });
+    } else {
+      this.setState({ isLoggedin: false });
+    }
+    if (this.state.isLoggedin) {
+      await this.fetchTasks();
+    }
+  };
 
   fetchTasks = async () => {
-    console.log('FETCH TASKS')
-    fetch('/tasks/')
+    fetch('/tasks/', {
+      method: 'GET',
+      headers: {
+        authorization: JSON.parse(localStorage['auth']).token,
+        author: JSON.parse(localStorage['auth']).userId,
+      },
+    })
       .then((res) => res.json())
       .then(async (tasks) => {
-        console.log(tasks, 'TASKS')
         await this.setState({ tasks });
         this.stateTasksCounter();
       });
   };
 
-  checkUser = async () => {
-    fetch('/checkUser/')
-    .then((res) => res.json())
-    .then(async (user) => {
-      console.log(document.cookie, 'COOKIE')
-      console.log(user)
-      await this.setState({ userName: user.email });
-      console.log('dolgo')
-      await this.setState({isLoggedin: !!user.email})
-      console.log('very dolgo')
-      await this.fetchTasks();
-      console.log(document.cookie, 'COOKIE')
+  setSignup = () => this.setState({ logOrSignUp: 'signup' });
 
-    });
-  }
-
-  loginHandler = async (e) => { 
-    await this.checkUser()
-  }
-
-  setSignup = () => this.setState({logOrSignUp: 'signup'})
-
-  setLogin = () => this.setState({logOrSignUp: 'login'})
-
-  signupHandler = async (e) => {
-    //  await this.checkAuth()
-     await this.checkUser()
-  }
+  setLogin = () => this.setState({ logOrSignUp: 'login' });
 
   logout = async () => {
-    try {
-      await fetch('/logout')
-    } catch (err) {
-      console.log(err);
-    }
-    // await this.checkAuth();
-  }
+    await this.setState({ tasks: [] });
+    await localStorage.removeItem('auth');
+    await this.checkAuth();
+  };
 
   addTask = async (title, isCompleted) => {
     await fetch('/tasks/', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        authorization: JSON.parse(localStorage['auth']).token,
       },
       method: 'POST',
-      body: JSON.stringify({ title, isCompleted }),
+      body: JSON.stringify({
+        title,
+        isCompleted,
+        author: JSON.parse(localStorage['auth']).userId,
+      }),
     }).catch(function (err) {
       console.log(err);
     });
@@ -123,6 +118,7 @@ export default class App extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        authorization: JSON.parse(localStorage['auth']).token,
       },
       method: 'PATCH',
       body: JSON.stringify([{ id: id, isCompleted: isCompleted }]),
@@ -145,12 +141,12 @@ export default class App extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        authorization: JSON.parse(localStorage['auth']).token,
       },
       method: 'DELETE',
       body: JSON.stringify([{ id: id }]),
     });
     await this.fetchTasks();
-    await this.fetchTasks(); // по неизвестной причине не всегда срабатывает с первого раза
   };
 
   changeTask = async (value, id) => {
@@ -158,6 +154,7 @@ export default class App extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        authorization: JSON.parse(localStorage['auth']).token,
       },
       method: 'PATCH',
       body: JSON.stringify([{ id: id, title: value }]),
@@ -178,6 +175,7 @@ export default class App extends React.Component {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        authorization: JSON.parse(localStorage['auth']).token,
       },
       method: 'PATCH',
       body: JSON.stringify(
@@ -192,10 +190,12 @@ export default class App extends React.Component {
 
   clearCompleted = async () => {
     let tempItems = this.state.tasks.filter((e) => !e.isCompleted);
+
     fetch('/tasks/', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        authorization: JSON.parse(localStorage['auth']).token,
       },
       method: 'DELETE',
       body: JSON.stringify(
@@ -218,42 +218,48 @@ export default class App extends React.Component {
         <h1>todos</h1>
         {this.state.isLoggedin && (
           <>
-        <p className="username">Logged as {this.state.userName}</p>
-        <Input
-          addTask={this.addTask}
-          completeAll={this.completeAll}
-          isAllCompleted={
-            this.state.tasksCounter.all === this.state.tasksCounter.completed
-          }
-          isNotEmpty={this.state.tasksCounter.all}
-        />
-        
-        {!!this.state.tasks.length && (
-          <>
-            <List
-              tasks={this.state.tasks}
-              changeCompleteness={this.changeCompleteness}
-              showCondition={this.state.showCondition}
-              deleteTask={this.deleteTask}
-              taskElemHandler={this.taskElemHandler}
-              changeTask={this.changeTask}
+            <p className='username'>
+              Logged as {JSON.parse(localStorage['auth']).email}
+            </p>
+            <Input
+              addTask={this.addTask}
+              completeAll={this.completeAll}
+              isAllCompleted={
+                this.state.tasksCounter.all ===
+                this.state.tasksCounter.completed
+              }
+              isNotEmpty={this.state.tasksCounter.all}
             />
-            <Footer
-              clearCompleted={this.clearCompleted}
-              showActive={this.showActive}
-              showAll={this.showAll}
-              showCompleted={this.showCompleted}
-              showCondition={this.state.showCondition}
-              tasksCounter={this.state.tasksCounter}
-              logout={this.logout}
-            />
+
+            {!!this.state.tasks.length && (
+              <>
+                <List
+                  tasks={this.state.tasks}
+                  changeCompleteness={this.changeCompleteness}
+                  showCondition={this.state.showCondition}
+                  deleteTask={this.deleteTask}
+                  taskElemHandler={this.taskElemHandler}
+                  changeTask={this.changeTask}
+                />
+                <Footer
+                  clearCompleted={this.clearCompleted}
+                  showActive={this.showActive}
+                  showAll={this.showAll}
+                  showCompleted={this.showCompleted}
+                  showCondition={this.state.showCondition}
+                  tasksCounter={this.state.tasksCounter}
+                  logout={this.logout}
+                />
+              </>
+            )}
           </>
         )}
-        </>
+        {!this.state.isLoggedin && this.state.logOrSignUp === 'login' && (
+          <Login checkAuth={this.checkAuth} setSignup={this.setSignup} />
         )}
-        {!this.state.isLoggedin &&  this.state.logOrSignUp === 'login' && (<Login setSignup={this.setSignup} loginHandler={this.loginHandler}/>)}
-        {!this.state.isLoggedin &&  this.state.logOrSignUp === 'signup' && (<Signup setLogin={this.setLogin} signupHandler={this.signupHandler}/>)}
-          
+        {!this.state.isLoggedin && this.state.logOrSignUp === 'signup' && (
+          <Signup checkAuth={this.checkAuth} setLogin={this.setLogin} />
+        )}
       </div>
     );
   }
